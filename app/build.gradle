@@ -3,10 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+    //**兼容Android6.0系统所需，如果这句话报错，可在dependencies标签下使用compile 'cn.bmob.android:http-legacy:1.0'**
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.example.idea"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -17,11 +19,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    allprojects {
+        repositories {
+            jcenter()
+            //Bmob的maven仓库地址--必填
+            maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
+        }
+    }
 }
 
-repositories{
-    flatDir{
-        dirs 'libs' //就是你放aar的目录地址
+repositories {
+    flatDir {
+        dirs 'libs'
     }
 }
 
@@ -30,9 +39,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile name: 'SMSSDK-2.1.4', ext: 'aar'
+    compile name: 'SMSSDKGUI-2.1.4', ext: 'aar'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'cn.bmob.android:bmob-sdk:3.5.5'
+    compile 'cn.bmob.android:http-legacy:1.0'
     testCompile 'junit:junit:4.12'
-    compile name:'SMSSDK-2.1.4',ext:'aar'
-    compile name:'SMSSDKGUI-2.1.4',ext:'aar'
 }

@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText android:id="@+id/edit_nickName"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="10dp"
+        android:background="#00000000"
+        android:hint="昵称"
+        android:textColorHint="#a0a0a0"
+        android:maxLength="11"
+        android:textColor="#000000"
+        android:textCursorDrawable="@drawable/color_cursor"
+        />
+
+    <View android:id="@+id/line_under_nickName"
+        android:background="#a0a0a0"
+        android:layout_below="@+id/edit_nickName"
+        android:layout_centerHorizontal="true"
+        android:layout_width="350dp"
+        android:layout_height="1dp" />
+
+    <EditText android:id="@+id/edit_passWord"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/line_under_nickName"
+        android:background="#00000000"
+        android:hint="密码"
+        android:textColorHint="#a0a0a0"
+        android:inputType="textPassword"
+        android:maxLength="15"
+        android:textColor="#000000"
+        android:textCursorDrawable="@drawable/color_cursor" />
+
+    <View android:id="@+id/line_under_passWord"
+        android:background="#a0a0a0"
+        android:layout_below="@+id/edit_passWord"
+        android:layout_centerHorizontal="true"
+        android:layout_width="350dp"
+        android:layout_height="1dp" />
+
+    <TextView
+        android:id="@+id/note"
+        android:layout_margin="15dp"
+        android:layout_below="@+id/line_under_passWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="密码长度为6~15，由字母和数字组成，不能以下划线等特殊字符开头"/>
+
+    <Button android:id="@+id/btn_confirm"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/note"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/login"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:text="确定"
+        android:textColor="@color/white"
+        />
+
+</RelativeLayout>

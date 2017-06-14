@@ -12,8 +12,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.List;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,12 +37,14 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     private String phoneNumber;         // 电话号码
     private String verificationCode;    // 验证码
 
-    private boolean flag;   // 操作是否成功
+    private boolean flag = false;   // 验证码是否已发送
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        Bmob.initialize(this, "b5c45e4964f247ffe8eea309f0990414");
 
         init(); // 初始化控件、注册点击事件
 
@@ -42,7 +56,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         EventHandler eventHandler = new EventHandler(){       // 操作回调
             @Override
             public void afterEvent(int event, int result, Object data) {
-
                 Message msg = new Message();
                 msg.arg1 = event;
                 msg.arg2 = result;
@@ -69,9 +82,25 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 if (!TextUtils.isEmpty(etPhoneNumber.getText())) {
                     if (etPhoneNumber.getText().length() == 11) {
                         phoneNumber = etPhoneNumber.getText().toString();
-                        SMSSDK.getVerificationCode("86", phoneNumber);
-                        etVerificationCode.requestFocus();
-//                        sendVerificationCode.setBackgroundResource(R.drawable.);
+                        BmobQuery<UserInfo> query = new BmobQuery<>();
+                        query.addWhereEqualTo("phoneNumber", phoneNumber);
+                        query.findObjects(new FindListener<UserInfo>() {
+                            @Override
+                            public void done(List<UserInfo> list, BmobException e) {
+                                if (e == null) {
+                                    if (list.size() == 0) {
+                                        Toast.makeText(Register.this, "可以注册", Toast.LENGTH_SHORT).show();
+                                        SMSSDK.getVerificationCode("86", phoneNumber);
+                                        etVerificationCode.requestFocus();
+                                        flag = true;
+                                    } else {
+                                        Toast.makeText(Register.this, "该手机号已被注册", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(Register.this, "查询失败", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                     else {
                         Toast.makeText(this, "请输入完整的电话号码", Toast.LENGTH_SHORT).show();
@@ -88,7 +117,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                     if (etVerificationCode.getText().length() == 4) {
                         verificationCode = etVerificationCode.getText().toString();
                         SMSSDK.submitVerificationCode("86", phoneNumber, verificationCode);
-                        flag = false;
                     } else {
                         Toast.makeText(this, "请输入完整的验证码", Toast.LENGTH_SHORT).show();
                         etVerificationCode.requestFocus();
@@ -116,9 +144,23 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 // 如果操作成功
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     // 校验验证码，返回校验的手机和国家代码
-                    Toast.makeText(Register.this, "验证成功", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Register.this, MainActivity.class);
-                    startActivity(intent);
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setPhoneNumber(etPhoneNumber.getText().toString());
+                    userInfo.setUserName("");
+                    userInfo.setPassWord("");
+                    userInfo.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String objectId, BmobException e) {
+                            if (e == null) {
+                                Toast.makeText(Register.this, "注册成功" + objectId, Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(Register.this, CreateInfo.class);
+                                intent.putExtra("objectId", objectId);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(Register.this, "注册失败" + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     // 获取验证码成功，true为智能验证，false为普通下发短信
                     Toast.makeText(Register.this, "验证码已发送", Toast.LENGTH_SHORT).show();
@@ -127,7 +169,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 }
             } else {
                 // 如果操作失败
-                if (flag) {
+                if (!flag) {
                     Toast.makeText(Register.this, "验证码获取失败，请重新获取", Toast.LENGTH_SHORT).show();
                     etPhoneNumber.requestFocus();
                 } else {
@@ -141,6 +183,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SMSSDK.unregisterAllEventHandler();
+        SMSSDK.unregisterAllEventHandler();  // 注销回调接口
     }
 }
