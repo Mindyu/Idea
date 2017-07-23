@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Idea</string>
+    <string name="camera">拍摄并上传视频</string>
+    <string name="hello">Hello World, CameraActivity!</string>
+</resources>

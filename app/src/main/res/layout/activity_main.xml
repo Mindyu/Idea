@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <LinearLayout
+        android:layout_above="@+id/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="20dp"
+            android:textSize="30dp"
+            android:text="睿视捷科技"/>
+    </LinearLayout>
+
+    <Button android:id="@+id/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_register"
+        android:layout_marginBottom="15dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/login"
+        android:textColor="#ffffff"
+        android:width="280dp"
+        android:text="登录"
+        android:textSize="15sp"
+        />
+
+    <Button android:id="@+id/btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/register"
+        android:textColor="#535353"
+        android:width="280dp"
+        android:text="注册"
+        android:textSize="15sp"
+        />
+
+</RelativeLayout>
