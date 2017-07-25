@@ -47,4 +47,6 @@ dependencies {
     compile 'cn.bmob.android:http-legacy:1.0'
     testCompile 'junit:junit:4.12'
     compile files('libs/commons-net-2.2.jar')
+    compile files('libs/mysql-connector-java-5.1.18-bin.jar')
+    compile files('libs/jxl.jar')
 }

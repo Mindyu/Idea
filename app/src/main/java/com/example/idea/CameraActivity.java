@@ -34,7 +34,7 @@ import cn.bmob.v3.listener.UploadFileListener;
 
 public class CameraActivity extends Activity {
 
-    final static String URL_CON = "http://118.89.140.80:8080/video/123.txt";
+    final static String URL_CON = "http://118.89.140.80/ruishijie.txt";
     int result=0;
     /**
      * Called when the activity is first created.
@@ -63,11 +63,7 @@ public class CameraActivity extends Activity {
                 default:
                     break;
             }
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             Intent intent = new Intent(CameraActivity.this, MainPage.class);
             startActivity(intent);
         }
@@ -112,6 +108,8 @@ public class CameraActivity extends Activity {
                     new Upload(filPath).start();
                 }
             }
+        }else {
+            this.finish();
         }
 
     }
@@ -151,7 +149,7 @@ public class CameraActivity extends Activity {
         try {
 
             //单文件上传
-            new FTP().uploadSingleFile(file, "/image", new FTP.UploadProgressListener() {
+            new FTP().uploadSingleFile(file, "/video", new FTP.UploadProgressListener() {
 
                 @Override
                 public void onUploadProgress(String currentStep, long uploadSize, File file) {

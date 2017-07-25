@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import static com.example.idea.CameraActivity.URL_CON;
 
 public class MainActivity extends Activity implements View.OnClickListener{
 
@@ -26,6 +29,22 @@ public class MainActivity extends Activity implements View.OnClickListener{
         Button register = (Button) findViewById(R.id.btn_register);
         login.setOnClickListener(this);
         register.setOnClickListener(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ConnectionDetector cd = new ConnectionDetector(MainActivity.this);
+                if (cd.isConnectingToInternet()) {
+                    if ( !cd.checkURL(URL_CON) ){
+                        MainActivity.this.finish();
+                    }else {
+//                        Log.d("123456","123456");
+                    }
+                }else {
+                    MainActivity.this.finish();
+                }
+            }
+        }).start();
     }
 
     @Override

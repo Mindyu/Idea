@@ -44,6 +44,17 @@ public class Register extends Activity implements View.OnClickListener {
 
     private boolean flag = false;   // 验证码是否已发送
 
+    private final Handler handler1 = new Handler() {
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+        @Override
+        public void handleMessage(Message msg) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                sendVerificationCode.setBackground(getDrawable(R.drawable.login));
+            }
+            sendVerificationCode.setEnabled(true);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +113,19 @@ public class Register extends Activity implements View.OnClickListener {
                             public void done(List<UserInfo> list, BmobException e) {
                                 if (e == null) {
                                     if (list.size() == 0) {
+                                        sendVerificationCode.setBackground(getDrawable(R.drawable.after));
+                                        sendVerificationCode.setEnabled(false);
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Thread.sleep(60000);
+                                                    handler1.sendMessage(new Message());
+                                                } catch (InterruptedException e1) {
+                                                    e1.printStackTrace();
+                                                }
+                                            }
+                                        }).start();
 //                                        Toast.makeText(Register.this, "可以注册", Toast.LENGTH_SHORT).show();
                                         SMSSDK.getVerificationCode("86", phoneNumber);
                                         etVerificationCode.requestFocus();

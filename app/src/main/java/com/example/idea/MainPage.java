@@ -48,7 +48,8 @@ public class MainPage extends Activity {
             @Override
             public void onClick(View view) {
                 //报表查询
-
+                Intent intent = new Intent(MainPage.this, SearchData.class);
+                startActivity(intent);
             }
         });
     }

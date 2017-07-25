@@ -33,6 +33,8 @@
         <activity android:name=".MainPage" />
         <activity android:name=".Login"/>
         <activity android:name=".CameraActivity"/>
+        <activity android:name=".CreatExcelActivity"/>
+        <activity android:name=".SearchData"/>
     </application>
 
 </manifest>

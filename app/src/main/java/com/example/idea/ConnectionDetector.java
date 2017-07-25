@@ -41,7 +41,8 @@ public class ConnectionDetector {
         boolean result = false;
         try {
             HttpURLConnection conn=(HttpURLConnection)new URL(url).openConnection();
-            conn.setConnectTimeout(30000);     ///
+            conn.setConnectTimeout(3000);     ///
+            conn.setReadTimeout(3000);
             int code = conn.getResponseCode();
             if(code!=200){
                 result=false;

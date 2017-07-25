@@ -45,7 +45,7 @@ public class FTP {
     private FTPClient ftpClient;
 
     public FTP() {
-        this.hostName = "118.89.140.80";
+        this.hostName = "192.168.1.106";            //192.168.1.106
         this.serverPort = 21;
         this.userName = "ftp";
         this.password = "123456";
@@ -132,7 +132,7 @@ public class FTP {
         // 带有进度的方式
         BufferedInputStream buffIn = new BufferedInputStream(new FileInputStream(localFile));
         ProgressInputStream progressInput = new ProgressInputStream(buffIn, listener, localFile);
-        flag = ftpClient.storeFile(localFile.getName(), progressInput);
+        flag = ftpClient.storeFile(localFile.getName(), progressInput);    //localFile.getName()设置上传之后的文件名
         buffIn.close();
 
         return flag;
